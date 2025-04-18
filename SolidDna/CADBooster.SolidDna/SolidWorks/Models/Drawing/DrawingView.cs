@@ -29,6 +29,10 @@ namespace CADBooster.SolidDna
         /// </summary>
         public double PositionY => ((double[])BaseObject.Position)[1];
 
+        public XYZ Position => new XYZ(PositionX, PositionY, 0);
+
+        public Model ReferencedModel => new Model(UnsafeObject.ReferencedDocument);
+
         /// <summary>
         /// The bounding box of the view
         /// </summary>
@@ -51,6 +55,30 @@ namespace CADBooster.SolidDna
         /// <param name="comObject">The underlying COM object</param>
         public DrawingView(View comObject) : base(comObject)
         {
+        }
+
+        #endregion
+
+        #region Public Members
+
+        public XYZ GetNormal()
+        {
+            var transform = UnsafeObject.ModelToViewTransform;
+
+            var transformArray = (double[])transform.ArrayData;
+
+            return new XYZ(transformArray[6], transformArray[7], transformArray[8]);
+        }
+
+        public Outline2D GetOutline()
+        {
+            var box = (double[])BaseObject.GetOutline();
+
+            var min = new XYZ(box[0], box[1], 0);
+            var max = new XYZ(box[2], box[3], 0);
+
+
+            return new Outline2D(min, max);
         }
 
         #endregion

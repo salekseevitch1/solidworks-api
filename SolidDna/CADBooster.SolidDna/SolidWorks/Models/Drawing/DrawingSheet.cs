@@ -1,11 +1,12 @@
 ﻿using SolidWorks.Interop.sldworks;
+using SolidWorks.Interop.swconst;
 
 namespace CADBooster.SolidDna
 {
     /// <summary>
     /// A sheet of a drawing
     /// </summary>
-    public class DrawingSheet: SolidDnaObject<Sheet>
+    public class DrawingSheet : SolidDnaObject<Sheet>
     {
         #region Private Members
 
@@ -43,5 +44,25 @@ namespace CADBooster.SolidDna
         /// Activates this sheet
         /// </summary>
         public bool Activate() => mDrawingDoc.ActivateSheet(SheetName);
+
+        public Size GetSize(out swDwgPaperSizes_e paperSize)
+        {
+            var width = 0d;
+            var height = 0d;
+
+            paperSize = (swDwgPaperSizes_e)BaseObject.GetSize(ref width, ref height);
+
+            return new Size(width, height);
+        }
+
+        public XYZ GetCenter()
+        {
+            var viewsSheetSize = GetSize(out _);
+
+            var centerX = viewsSheetSize.Width / 2;
+            var centerY = viewsSheetSize.Height / 2;
+            
+            return new XYZ(centerX, centerY, 0);
+        }
     }
 }

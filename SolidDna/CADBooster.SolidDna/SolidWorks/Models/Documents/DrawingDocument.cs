@@ -1,4 +1,5 @@
 ﻿using SolidWorks.Interop.sldworks;
+using SolidWorks.Interop.swconst;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,8 @@ namespace CADBooster.SolidDna
         /// WARNING: Use with caution. You must handle all disposal from this point on
         /// </summary>
         public DrawingDoc UnsafeObject => mBaseObject;
+
+        public DrawingDocumentCreation Creation => new DrawingDocumentCreation(this);
 
         #endregion
 
@@ -140,7 +143,7 @@ namespace CADBooster.SolidDna
         /// </summary>
         /// <returns></returns>
         public string[] SheetNames() => (string[])mBaseObject.GetSheetNames();
-        
+
         public void ForEachSheet(Action<DrawingSheet> sheetsCallback)
         {
             // Get each sheet name
@@ -156,6 +159,72 @@ namespace CADBooster.SolidDna
                     sheetsCallback(sheet);
                 }
             }
+        }
+
+        public DrawingSheet NewSheet(
+            string name,
+            swDwgPaperSizes_e paperSize,
+            swDwgTemplates_e template,
+            ScaleSettings scale = null,
+            MarginSettings margin = null)
+        {
+            scale = scale ?? ScaleSettings.FullScale;
+            margin = margin ?? MarginSettings.Zero;
+
+            mBaseObject.NewSheet4(
+                // Name to be given to the new drawing sheet
+                Name: name,
+                // Size of paper as defined in swDwgPaperSizes_e;
+                // valid only if TemplateIn is swDwgTemplates_e.swDwgTemplateNone
+                PaperSize: (int)paperSize,
+                // Template as defined in swDwgTemplates_e
+                TemplateIn: (int)template,
+                // Scale numerator
+                Scale1: scale.Numerator,
+                // Scale denominator
+                Scale2: scale.Denominator,
+                // True for first angle projection, false for third angle projection
+                FirstAngle: false,
+                // Name of custom template with full directory path;
+                // valid only if TemplateIn is set
+                // to swDwgTemplates_e.swDwgTemplateCustom
+                TemplateName: string.Empty,
+                // Paper width; valid only if TemplateIn is set
+                // to swDwgTemplates_e.swDwgTemplateNone
+                // or PaperSize is set to swDwgPaperSizes_e.swDwgPapersUserDefined
+                Width: 0,
+                // Paper height; valid only if TemplateIn is set
+                // to swDwgTemplates_e.swDwgTemplateNone or PaperSize
+                // is set to swDwgPaperSizes_e.swDwgPapersUserDefined
+                Height: 0,
+                // Name of view containing the model from which
+                // to get custom property values
+                PropertyViewName: "",
+                // Zone area left margin; distance from drawing sheet's left edge
+                ZoneLeftMargin: margin.Left,
+                // Zone area right margin; distance from drawing sheet's right edge
+                ZoneRightMargin: margin.Right,
+                // Zone area top margin; distance from drawing sheet's top edge
+                ZoneTopMargin: margin.Top,
+                // Zone area bottom margin; distance from drawing sheet's bottom edge
+                ZoneBottomMargin: margin.Bottom,
+                // Number of zone rows in the zone area of this sheet (see Remarks)
+                ZoneRow: 0,
+                // Number of zone columns in the zone area of this sheet (see Remarks)
+                ZoneCol: 0
+            );
+
+            // Remarks
+            // The drawing sheet can be created with zones that annotations
+            // in other views can reference. Each zone is referenced by
+            // an alphanumeric label that is defined using the Zone Editor.
+            // See the SOLIDWORKS Help for more information about drawing sheet zones.
+            // 
+            // (ZoneRow x ZoneCol) is the total number of zones in the zone
+            // area of this drawing sheet. The zone area is specified
+            // by ZoneLeftMargin, ZoneRightMargin, ZoneTopMargin, and ZoneBottomMargin.
+
+            return new DrawingSheet(mBaseObject.Sheet[name], this);
         }
 
         #endregion
@@ -206,6 +275,36 @@ namespace CADBooster.SolidDna
                 // Dispose all views
                 views.ForEach(view => view.Dispose());
             }
+        }
+
+        public DrawingView CreateDrawViewFromModelView(
+            string partPath,
+            ViewType viewType,
+            XYZ point,
+            string viewName = "")
+        {
+            var view = UnsafeObject.CreateDrawViewFromModelView3(
+                ModelName: partPath,
+                ViewName: $"*{viewType.ToString()}",
+                LocX: point.X,
+                LocY: point.Y,
+                LocZ: point.Z);
+
+            if (!string.IsNullOrEmpty(viewName))
+                view.SetName2(viewName);
+
+            return new DrawingView(view);
+        }
+
+        public DrawingView GetView(string sheetName, string viewName)
+        {
+            var views = UnsafeObject.Sheet[sheetName].GetViews() as object[];
+
+            var view = views?
+                .Cast<View>()
+                .FirstOrDefault(it => string.Equals(it.Name, viewName));
+
+            return new DrawingView(view);
         }
 
         #endregion
@@ -321,6 +420,43 @@ namespace CADBooster.SolidDna
         /// Attempts to attach unattached dimensions, for example in an imported DXF file
         /// </summary>
         public void AttachDimensions() => mBaseObject.AttachDimensions();
+
+        public ITableAnnotation InsertTable(
+            swBOMConfigurationAnchorType_e anchor,
+            XYZ position,
+            int rowCount,
+            int columnCount,
+            string templatePath = "")
+        {
+            return mBaseObject.InsertTableAnnotation2(
+                // True to anchor the table to the general table
+                // anchor point and ignore any coordinates specified
+                // for X and Y, or false to use the coordinates specified
+                // for X and Y
+                false,
+                // X coordinate to insert this table annotation
+                position.X,
+                // Y coordinate to insert this table annotation
+                position.Y,
+                // Type of anchor as defined in swBOMConfigurationAnchorType_e (see Remarks)
+                (int)anchor,
+                // Path and filename of the general table template to use  (see Remarks)
+                templatePath,
+                // Number of rows in the table annotation
+                rowCount,
+                // Number of columns in the table annotation
+                columnCount);
+
+            // Remarks
+            // If TableTemplate is... Then..
+
+            // A valid path and filename
+            // AnchorType and Columns are ignored, and the information
+            // from the table template is used instead
+
+            // Empty
+            // General table is inserted based only on the other input arguments
+        }
 
         #endregion
 

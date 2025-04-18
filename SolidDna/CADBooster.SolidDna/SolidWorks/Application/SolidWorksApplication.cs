@@ -63,8 +63,8 @@ namespace CADBooster.SolidDna
         /// <summary>
         /// Whether we are currently connected to 3DExperience. Was added in SolidWorks 2022, so we always return None for older versions.
         /// </summary>
-        public ConnectionStatus3DExperience ConnectionStatus3DExperience => SolidWorksVersion.Version < 2022 
-                ? ConnectionStatus3DExperience.None 
+        public ConnectionStatus3DExperience ConnectionStatus3DExperience => SolidWorksVersion.Version < 2022
+                ? ConnectionStatus3DExperience.None
                 : (ConnectionStatus3DExperience)BaseObject.Get3DExperienceState();
 
         /// <summary>
@@ -86,6 +86,11 @@ namespace CADBooster.SolidDna
         /// The SolidWorks instance cookie
         /// </summary>
         public int SolidWorksCookie => mSwCookie;
+
+        /// <summary>
+        /// The SolidWorks Math Utility object
+        /// </summary>
+        public MathUtility MathUtility => BaseObject.GetMathUtility() as MathUtility;
 
         #endregion
 
@@ -462,7 +467,7 @@ namespace CADBooster.SolidDna
             // If the user did not pass a template path, we get the default template path from SolidWorks.
             if (templatePath.IsNullOrEmpty())
                 templatePath = Preferences.DefaultAssemblyTemplate;
-            
+
             return CreateFile(templatePath);
         }
 
@@ -477,7 +482,7 @@ namespace CADBooster.SolidDna
             // If the user did not pass a template path, we get the default template path from SolidWorks.
             if (templatePath.IsNullOrEmpty())
                 templatePath = Preferences.DefaultDrawingTemplate;
-            
+
             return CreateFile(templatePath, paperSize);
         }
 

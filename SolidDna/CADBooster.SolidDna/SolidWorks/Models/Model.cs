@@ -95,6 +95,8 @@ namespace CADBooster.SolidDna
         /// </summary>
         public SelectionManager SelectionManager { get; protected set; }
 
+        public ModelCreation Creation => new ModelCreation(this);
+
         #endregion
 
         #region Public Events
@@ -512,8 +514,8 @@ namespace CADBooster.SolidDna
         protected int AddItemNotify(int entityType, string itemName)
         {
             // Inform listeners
-            ItemAdded((swNotifyEntityType_e) entityType, itemName);
-            
+            ItemAdded((swNotifyEntityType_e)entityType, itemName);
+
             // NOTE: 0 is success, anything else is an error
             return 0;
         }
@@ -541,8 +543,8 @@ namespace CADBooster.SolidDna
         private int DeleteItemPostNotify(int entityType, string itemName)
         {
             // Inform listeners
-            ItemDeleted((swNotifyEntityType_e) entityType, itemName);
-            
+            ItemDeleted((swNotifyEntityType_e)entityType, itemName);
+
             // NOTE: 0 is success, anything else is an error
             return 0;
         }
@@ -556,7 +558,7 @@ namespace CADBooster.SolidDna
         private int DeleteItemPreNotify(int entityType, string itemName)
         {
             // Inform listeners
-            ItemDeleting((swNotifyEntityType_e) entityType, itemName);
+            ItemDeleting((swNotifyEntityType_e)entityType, itemName);
 
             // NOTE: 0 is success, anything else is an error
             return 0;
@@ -570,7 +572,7 @@ namespace CADBooster.SolidDna
         {
             // Inform listeners
             DeletingSelection();
-            
+
             // NOTE: 0 is success, anything else is an error
             return 0;
         }
@@ -740,7 +742,7 @@ namespace CADBooster.SolidDna
         {
             // Inform listeners
             ModelSaving(fileName);
-            
+
             // NOTE: 0 is success, anything else is an error
             return 0;
         }
@@ -1296,7 +1298,7 @@ namespace CADBooster.SolidDna
                 // Inform callback of the feature
                 yield return (startComponent, componentDepth);
             }
-            
+
             // Loop each child when available
             if (startComponent != null)
             {
@@ -1346,7 +1348,7 @@ namespace CADBooster.SolidDna
             {
                 // Find any drawings that exist. Clone list so we can add new items to same list
                 var drawings = dependencies.Where(f => !f.ToLower().EndsWith(".slddrw") && File.Exists(Path.ChangeExtension(f, ".slddrw"))).ToList();
-                
+
                 // Add all drawings to the list of dependencies
                 dependencies.AddRange(drawings);
             }
@@ -1602,6 +1604,29 @@ namespace CADBooster.SolidDna
 
             // Dispose self
             base.Dispose();
+        }
+
+        #endregion
+
+        #region Insert
+        public void InsertImage(string imagePath, XYZ origin, Size size = null)
+        {
+            UnsafeObject.ClearSelection2(true);
+
+            var swSketchMgr = UnsafeObject.SketchManager;
+
+            UnsafeObject.EditSketch();
+
+            var image = swSketchMgr.InsertSketchPicture2(
+                imagePath,
+                true);
+
+            if (size != null)
+                image.SetSize(size.Width, size.Height, true);
+
+            image.SetOrigin(origin.X, origin.Y);
+
+            swSketchMgr.EditSketchBlock();
         }
 
         #endregion

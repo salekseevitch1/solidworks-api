@@ -17,6 +17,7 @@ namespace CADBooster.SolidDna
 
         public double this[int index] => ArrayData[index];
 
+
         public XYZ(MathPoint mathPoint)
         {
             var coords = (double[])mathPoint.ArrayData;
@@ -25,13 +26,21 @@ namespace CADBooster.SolidDna
             Y = coords[1];
             Z = coords[2];
         }
+        public XYZ(MathVector mathVector)
+        {
+            var coords = (double[])mathVector.ArrayData;
 
+            X = coords[0];
+            Y = coords[1];
+            Z = coords[2];
+        }
         public XYZ(double x, double y, double z)
         {
             X = x;
             Y = y;
             Z = z;
         }
+
 
         public static XYZ operator +(XYZ thisPoint, XYZ otherPoint)
         {
@@ -119,10 +128,8 @@ namespace CADBooster.SolidDna
             return XYZ.Convert(transformed);
         }
 
-        public XYZ MoveAlongVector(XYZ vector, double distance)
-        {
-            return this + (vector * distance);
-        }
+        public XYZ MoveAlongVector(XYZ vector, double distance) 
+            => this + (vector * distance);
 
         public XYZ CrossProduct(XYZ other)
         {
@@ -133,8 +140,16 @@ namespace CADBooster.SolidDna
         }
 
         public XYZ Scale(double scale)
+            => this * scale;
+
+        public bool IsAlmostEquals(XYZ other, double tolerance = 1E-5)
         {
-            return this * scale;
+            return Math.Abs(X - other.X) < tolerance &&
+                   Math.Abs(Y - other.Y) < tolerance &&
+                   Math.Abs(Z - other.Z) < tolerance;
         }
+
+        public XYZ Normalize() 
+            => new(AsMathVector().Normalise());
     }
 }

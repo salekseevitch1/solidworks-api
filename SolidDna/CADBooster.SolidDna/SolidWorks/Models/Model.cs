@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using ModelView = CADBooster.SolidDna.SolidWorks.Models.Views.ModelView;
 
 namespace CADBooster.SolidDna
 {
@@ -95,7 +96,17 @@ namespace CADBooster.SolidDna
         /// </summary>
         public SelectionManager SelectionManager { get; protected set; }
 
+        /// <summary>
+        /// Gets the title associated with the current object.
+        /// </summary>
+        public string Title => BaseObject.GetTitle();
+
+        /// <summary>
+        /// Gets the creation class for the model.
+        /// </summary>
         public ModelCreation Creation => new ModelCreation(this);
+
+        public ModelView ActiveModelView => new((IModelView)BaseObject.ActiveView, this);
 
         #endregion
 

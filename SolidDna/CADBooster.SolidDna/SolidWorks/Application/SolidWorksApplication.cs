@@ -950,6 +950,71 @@ namespace CADBooster.SolidDna
             return (SolidWorksMessageBoxResult)BaseObject.SendMsgToUser2(message, (int)icon, (int)buttons);
         }
 
+        /// <summary>
+        /// Activates the specified model within the given part document.
+        /// </summary>
+        /// <remarks>This method activates the model specified by the <paramref name="partDocument"/> and
+        /// optionally rebuilds it based on the <paramref name="rebuildOnActivation"/> parameter. The activation result
+        /// is provided via the <paramref name="error"/> output parameter.</remarks>
+        /// <param name="partDocument">The part document containing the model to activate. Cannot be null.</param>
+        /// <param name="rebuildOnActivation">Specifies whether the model should be rebuilt upon activation. Use <see cref="swRebuildOnActivation_e"> to
+        /// indicate the desired rebuild behavior.</param>
+        /// <param name="error">When the method returns, contains the result of the activation operation. Use <see
+        /// cref="swActivateDocError_e"> to determine the success or failure of the activation.</param>
+        /// <returns>The activated model if the operation succeeds; otherwise, <see langword="null"/>.</returns>
+        public Model? ActivateModel(
+            PartDocument partDocument,
+            swRebuildOnActivation_e rebuildOnActivation = swRebuildOnActivation_e.swRebuildActiveDoc)
+            => ActivateModel(partDocument.Title, rebuildOnActivation, out _);
+
+        /// <summary>
+        /// Activates the specified model within the drawing document.
+        /// </summary>
+        /// <remarks>Use this method to activate a model within a drawing document, optionally rebuilding
+        /// it during activation. The method returns <see langword="null"/> if the activation fails, and the <paramref
+        /// name="error"/> parameter provides additional information about the failure.</remarks>
+        /// <param name="drawingDocument">The drawing document containing the model to activate. Cannot be null.</param>
+        /// <param name="rebuildOnActivation">Specifies whether the model should be rebuilt upon activation.</param>
+        /// <param name="error">When the method returns, contains the result of the activation operation.  This parameter is passed
+        /// uninitialized.</param>
+        /// <returns>The activated model if the operation succeeds; otherwise, <see langword="null"/>.</returns>
+        public Model? ActivateModel(
+            DrawingDocument drawingDocument,
+            swRebuildOnActivation_e rebuildOnActivation = swRebuildOnActivation_e.swRebuildActiveDoc) 
+            => ActivateModel(drawingDocument.Title, rebuildOnActivation, out _);
+
+        /// <summary>
+        /// Activates a model in the application by its title and returns the activated model.
+        /// </summary>
+        /// <remarks>This method attempts to activate a model by its title. If the activation is
+        /// successful, the method returns a <see cref="Model"/> object. If the activation fails, the method returns
+        /// <see langword="null"/> and sets the <paramref name="error"/> parameter to indicate the failure
+        /// reason.</remarks>
+        /// <param name="modelTitle">The title of the model to activate. This must match the name of an existing model.</param>
+        /// <param name="rebuildOnActivation">Specifies whether the model should be rebuilt upon activation. Use values from <see
+        /// cref="swRebuildOnActivation_e"/>.</param>
+        /// <param name="error">When the method returns, contains the result of the activation operation. Use values from <see
+        /// cref="swActivateDocError_e"/> to determine the outcome.</param>
+        /// <returns>A <see cref="Model"/> object representing the activated model, or <see langword="null"/> if the activation
+        /// fails.</returns>
+        private Model? ActivateModel(
+            string modelTitle,
+            swRebuildOnActivation_e rebuildOnActivation,
+            out swActivateDocError_e error)
+        {
+            var swError = 0;
+
+            var modelDoc = UnsafeObject.ActivateDoc3(
+                modelTitle,
+                true,
+                (int)rebuildOnActivation,
+                ref swError);
+
+            error = (swActivateDocError_e)swError;
+
+            return modelDoc is ModelDoc2 mDoc ? new Model(mDoc) : null;
+        }
+
         #endregion
 
         #region Dispose

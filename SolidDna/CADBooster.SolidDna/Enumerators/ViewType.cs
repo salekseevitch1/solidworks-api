@@ -2,6 +2,7 @@
 {
     public enum ViewType
     {
+        Invalid = -1,
         Top,
         Front,
         Right,

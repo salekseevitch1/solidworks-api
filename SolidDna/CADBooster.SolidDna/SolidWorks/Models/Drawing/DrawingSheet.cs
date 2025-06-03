@@ -61,8 +61,16 @@ namespace CADBooster.SolidDna
 
             var centerX = viewsSheetSize.Width / 2;
             var centerY = viewsSheetSize.Height / 2;
-            
+
             return new XYZ(centerX, centerY, 0);
+        }
+
+        public void GetScale(out int numerator, out int denominator)
+        {
+            var properties = (double[])UnsafeObject.GetProperties2();
+
+            numerator = (int)properties[2];
+            denominator = (int)properties[3];
         }
     }
 }

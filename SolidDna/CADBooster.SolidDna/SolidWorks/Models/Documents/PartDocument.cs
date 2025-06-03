@@ -25,6 +25,11 @@ namespace CADBooster.SolidDna
         /// </summary>
         public PartDoc UnsafeObject => mBaseObject;
 
+        /// <summary>
+        /// Gets the title of the associated model document.
+        /// </summary>
+        public string Title => ((IModelDoc2)UnsafeObject).GetTitle();
+
         #endregion
 
         #region Constructor

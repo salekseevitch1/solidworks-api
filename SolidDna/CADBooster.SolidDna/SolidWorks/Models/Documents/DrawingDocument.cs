@@ -28,6 +28,8 @@ namespace CADBooster.SolidDna
         /// </summary>
         public DrawingDoc UnsafeObject => mBaseObject;
 
+        public string Title => ((IModelDoc2)UnsafeObject).GetTitle();
+
         public DrawingDocumentCreation Creation => new DrawingDocumentCreation(this);
 
         #endregion
@@ -136,6 +138,19 @@ namespace CADBooster.SolidDna
             {
                 return sheet.SheetName;
             }
+        }
+
+        /// <summary>
+        /// Retrieves the currently active drawing sheet.
+        /// </summary>
+        /// <remarks>The returned <see cref="DrawingSheet"/> object is initialized based on the current
+        /// sheet in the underlying base object. Ensure that the base object is properly configured before calling this
+        /// method.</remarks>
+        /// <returns>An instance of <see cref="DrawingSheet"/> representing the active sheet. If no sheet is active, the method
+        /// may return a default or placeholder sheet.</returns>
+        public DrawingSheet GetActiveSheet()
+        {
+            return new DrawingSheet((Sheet)mBaseObject.GetCurrentSheet(), this);
         }
 
         /// <summary>
@@ -275,6 +290,28 @@ namespace CADBooster.SolidDna
                 // Dispose all views
                 views.ForEach(view => view.Dispose());
             }
+        }
+
+        public DrawingView CreateDrawViewFromModelView(
+            PartDocument part,
+            string viewName) 
+            => CreateDrawViewFromModelView(part, viewName, XYZ.Zero);
+
+        public DrawingView CreateDrawViewFromModelView(
+            PartDocument part,
+            string viewName,
+            XYZ point)
+        {
+            var partPath = ((IModelDoc2)part.UnsafeObject).GetPathName();
+
+            var view = UnsafeObject.CreateDrawViewFromModelView3(
+                ModelName: partPath,
+                ViewName: viewName,
+                LocX: point.X,
+                LocY: point.Y,
+                LocZ: point.Z);
+
+            return new DrawingView(view);
         }
 
         public DrawingView CreateDrawViewFromModelView(

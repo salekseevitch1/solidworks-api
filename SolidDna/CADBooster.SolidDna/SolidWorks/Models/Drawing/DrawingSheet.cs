@@ -65,12 +65,17 @@ namespace CADBooster.SolidDna
             return new XYZ(centerX, centerY, 0);
         }
 
-        public void GetScale(out int numerator, out int denominator)
+        public void GetScale(out double numerator, out double denominator)
         {
             var properties = (double[])UnsafeObject.GetProperties2();
 
             numerator = (int)properties[2];
             denominator = (int)properties[3];
+        }
+
+        public void SetScale(double numerator, double denominator)
+        {
+            UnsafeObject.SetScale(numerator, denominator, false, false);
         }
     }
 }

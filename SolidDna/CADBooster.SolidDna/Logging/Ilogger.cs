@@ -51,6 +51,6 @@ namespace CADBooster.SolidDna
         //
         //   formatter:
         //     Function to create a string message of the state and exception.
-        void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter);
+        void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception, string> formatter);
     }
 }

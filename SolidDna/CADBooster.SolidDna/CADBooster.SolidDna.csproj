@@ -54,17 +54,25 @@ Added inner exception info to SolidDnaException ToString.</PackageReleaseNotes>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="SolidWorks.Interop.sldworks" HintPath="..\..\References\2025\SolidWorks.Interop.sldworks.dll" EmbedInteropTypes="false" />
-    <Reference Include="SolidWorks.Interop.sw3dprinter" HintPath="..\..\References\2025\SolidWorks.Interop.sw3dprinter.dll" EmbedInteropTypes="false" />
-    <Reference Include="SolidWorks.Interop.swcommands" HintPath="..\..\References\2025\SolidWorks.Interop.swcommands.dll" EmbedInteropTypes="false" />
-    <Reference Include="SolidWorks.Interop.swconst" HintPath="..\..\References\2025\SolidWorks.Interop.swconst.dll" EmbedInteropTypes="false" />
-    <Reference Include="SolidWorks.Interop.swdimxpert" HintPath="..\..\References\2025\SolidWorks.Interop.swdimxpert.dll" EmbedInteropTypes="false" />
-    <Reference Include="SolidWorks.Interop.swdocumentmgr" HintPath="..\..\References\2025\SolidWorks.Interop.swdocumentmgr.dll" EmbedInteropTypes="false" />
-    <Reference Include="SolidWorks.Interop.swmotionstudy" HintPath="..\..\References\2025\SolidWorks.Interop.swmotionstudy.dll" EmbedInteropTypes="false" />
-    <Reference Include="SolidWorks.Interop.swpublished" HintPath="..\..\References\2025\SolidWorks.Interop.swpublished.dll" EmbedInteropTypes="false" />
-    <Reference Include="SolidWorks.Interop.SWRoutingLib" HintPath="..\..\References\2025\SolidWorks.Interop.SWRoutingLib.dll" EmbedInteropTypes="false" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
+
+    <PropertyGroup>
+        <SolidWorksVersion>2023</SolidWorksVersion>
+        <SolidWorksReferencePath>..\..\References\$(SolidWorksVersion)</SolidWorksReferencePath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="SolidWorks.Interop.sldworks" HintPath="$(SolidWorksReferencePath)\SolidWorks.Interop.sldworks.dll" EmbedInteropTypes="False" />
+        <Reference Include="SolidWorks.Interop.sw3dprinter" HintPath="$(SolidWorksReferencePath)\SolidWorks.Interop.sw3dprinter.dll" EmbedInteropTypes="False" />
+        <Reference Include="SolidWorks.Interop.swcommands" HintPath="$(SolidWorksReferencePath)\SolidWorks.Interop.swcommands.dll" EmbedInteropTypes="False" />
+        <Reference Include="SolidWorks.Interop.swconst" HintPath="$(SolidWorksReferencePath)\SolidWorks.Interop.swconst.dll" EmbedInteropTypes="False" />
+        <Reference Include="SolidWorks.Interop.swdimxpert" HintPath="$(SolidWorksReferencePath)\SolidWorks.Interop.swdimxpert.dll" EmbedInteropTypes="False" />
+        <Reference Include="SolidWorks.Interop.swdocumentmgr" HintPath="$(SolidWorksReferencePath)\SolidWorks.Interop.swdocumentmgr.dll" EmbedInteropTypes="False" />
+        <Reference Include="SolidWorks.Interop.swmotionstudy" HintPath="$(SolidWorksReferencePath)\SolidWorks.Interop.swmotionstudy.dll" EmbedInteropTypes="False" />
+        <Reference Include="SolidWorks.Interop.swpublished" HintPath="$(SolidWorksReferencePath)\SolidWorks.Interop.swpublished.dll" EmbedInteropTypes="False" />
+        <Reference Include="SolidWorks.Interop.SWRoutingLib" HintPath="$(SolidWorksReferencePath)\SolidWorks.Interop.SWRoutingLib.dll" EmbedInteropTypes="False" />
+    </ItemGroup>
 </Project>

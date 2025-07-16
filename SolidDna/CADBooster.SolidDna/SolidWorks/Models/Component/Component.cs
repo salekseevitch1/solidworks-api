@@ -156,7 +156,7 @@ namespace CADBooster.SolidDna
         /// <summary>
         /// Get the unique 32-character alphanumeric identifier for this component.
         /// </summary>
-        public string PlmId => BaseObject.GetPLMID();
+        public string PlmId => BaseObject.IGetModelDoc().Extension.GetPLMID();
 
         #endregion
 

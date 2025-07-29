@@ -163,5 +163,14 @@ namespace CADBooster.SolidDna
                 Length.From(Y, from).ToUnit(to).Value,
                 Length.From(Z, from).ToUnit(to).Value);
         }
+
+        public double DistanceTo(XYZ point)
+        {
+            var dx = point.X - X;
+            var dy = point.Y - Y;
+            var dz = point.Z - Z;
+
+            return Math.Sqrt((dx * dx) + (dy * dy) + (dz * dz));
+        }
     }
 }

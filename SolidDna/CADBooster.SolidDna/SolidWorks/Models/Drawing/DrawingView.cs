@@ -1,4 +1,7 @@
 ﻿using SolidWorks.Interop.sldworks;
+using SolidWorks.Interop.swconst;
+using System;
+using System.Collections.Generic;
 
 namespace CADBooster.SolidDna
 {
@@ -120,5 +123,32 @@ namespace CADBooster.SolidDna
             => UnsafeObject.Position = position.ArrayData;
 
         #endregion
+
+        public List<T> GetEntitiesByCondition<T>(Func<T, bool> condition)
+        {
+            var components = (object[])UnsafeObject.GetVisibleComponents();
+
+            var tElements = new List<T>();
+
+            foreach (Component2 component2 in components)
+            {
+                var entities = (object[])UnsafeObject.GetVisibleEntities2(
+                    component2,
+                    (int)swViewEntityType_e.swViewEntityType_Edge);
+
+                var edges = new List<IEdge>();
+
+                foreach (IEntity entity in entities)
+                {
+                    if (entity is not T tEntity)
+                        continue;
+
+                    if (condition(tEntity))
+                        tElements.Add(tEntity);
+                }
+            }
+
+            return tElements;
+        }
     }
 }

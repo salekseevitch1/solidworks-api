@@ -164,6 +164,10 @@ namespace CADBooster.SolidDna
                 Length.From(Z, from).ToUnit(to).Value);
         }
 
+        public XYZ ToXY() => new(X, Y, 0);
+
+        public XYZ Subtract(XYZ other) => this - other;
+
         public double DistanceTo(XYZ point)
         {
             var dx = point.X - X;
@@ -172,5 +176,7 @@ namespace CADBooster.SolidDna
 
             return Math.Sqrt((dx * dx) + (dy * dy) + (dz * dz));
         }
+
+        public XYZ Clone() => new(X, Y, Z);
     }
 }

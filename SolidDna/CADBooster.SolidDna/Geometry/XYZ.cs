@@ -178,5 +178,7 @@ namespace CADBooster.SolidDna
         }
 
         public XYZ Clone() => new(X, Y, Z);
+
+        public double GetLength() => Math.Sqrt((X * X) + (Y * Y) + (Z * Z));
     }
 }

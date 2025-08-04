@@ -167,6 +167,7 @@ namespace CADBooster.SolidDna
         public XYZ ToXY() => new(X, Y, 0);
 
         public XYZ Subtract(XYZ other) => this - other;
+        public XYZ Add(XYZ other) => this + other;
 
         public double DistanceTo(XYZ point)
         {

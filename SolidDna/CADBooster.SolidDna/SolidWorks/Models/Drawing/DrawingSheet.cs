@@ -73,9 +73,8 @@ namespace CADBooster.SolidDna
             denominator = (int)properties[3];
         }
 
-        public void SetScale(double numerator, double denominator)
-        {
-            UnsafeObject.SetScale(numerator, denominator, false, false);
-        }
+        public bool SetScale(double numerator, double denominator)
+            => UnsafeObject.SetScale(numerator, denominator, 
+                false, false);
     }
 }

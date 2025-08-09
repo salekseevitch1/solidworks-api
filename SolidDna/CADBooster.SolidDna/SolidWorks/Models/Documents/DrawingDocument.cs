@@ -311,6 +311,9 @@ namespace CADBooster.SolidDna
                 LocY: point.Y,
                 LocZ: point.Z);
 
+            if (view == null)
+                throw new InvalidOperationException($"Failed to create drawing view from model view '{viewName}' in part '{partPath}'.");
+
             return new DrawingView(view);
         }
 

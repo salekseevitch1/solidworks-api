@@ -119,15 +119,15 @@ namespace CADBooster.SolidDna
 
         #region Selection
 
-        public bool TrySelect(XYZ point, bool append, params string[] types)
+        public bool TrySelect(double[] point, bool append, params string[] types)
         {
             foreach (var type in types)
             {
                 var isSelected = UnsafeObject.SelectByID2("",
                     type.ToUpper(),
-                    point.X,
-                    point.Y,
-                    point.Z,
+                    point[0],
+                    point[1],
+                    point[2],
                     append,
                     0,
                     null,
@@ -140,12 +140,12 @@ namespace CADBooster.SolidDna
             return false;
         }
 
-        public bool TrySelectByRay(XYZ point, bool append, params swSelectType_e[] types)
+        public bool TrySelectByRay(double[] point, bool append, params swSelectType_e[] types)
         {
             foreach (var type in types)
             {
                 var isSelected = UnsafeObject.SelectByRay(
-                    point.X, point.Y, -100,
+                    point[0], point[1], -100,
                     0, 0, -1,
                     10E-5,
                     (int)type,
@@ -161,12 +161,12 @@ namespace CADBooster.SolidDna
             return false;
         }
 
-        public bool TrySelectByRay(XYZ point, bool append, params int[] types)
+        public bool TrySelectByRay(double[] point, bool append, params int[] types)
         {
             foreach (var type in types)
             {
                 var isSelected = UnsafeObject.SelectByRay(
-                    point.X, point.Y, -100,
+                    point[0], point[1], -100,
                     0, 0, -1,
                     10E-5,
                     (int)type,

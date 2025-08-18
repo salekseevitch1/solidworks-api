@@ -294,44 +294,20 @@ namespace CADBooster.SolidDna
 
         public DrawingView CreateDrawViewFromModelView(
             PartDocument part,
-            string viewName) 
-            => CreateDrawViewFromModelView(part, viewName, XYZ.Zero);
-
-        public DrawingView CreateDrawViewFromModelView(
-            PartDocument part,
             string viewName,
-            XYZ point)
+            double x, double y, double z)
         {
             var partPath = ((IModelDoc2)part.UnsafeObject).GetPathName();
 
             var view = UnsafeObject.CreateDrawViewFromModelView3(
                 ModelName: partPath,
                 ViewName: viewName,
-                LocX: point.X,
-                LocY: point.Y,
-                LocZ: point.Z);
+                LocX: x,
+                LocY: y,
+                LocZ: z);
 
             if (view == null)
                 throw new InvalidOperationException($"Failed to create drawing view from model view '{viewName}' in part '{partPath}'.");
-
-            return new DrawingView(view);
-        }
-
-        public DrawingView CreateDrawViewFromModelView(
-            string partPath,
-            ViewType viewType,
-            XYZ point,
-            string viewName = "")
-        {
-            var view = UnsafeObject.CreateDrawViewFromModelView3(
-                ModelName: partPath,
-                ViewName: $"*{viewType.ToString()}",
-                LocX: point.X,
-                LocY: point.Y,
-                LocZ: point.Z);
-
-            if (!string.IsNullOrEmpty(viewName))
-                view.SetName2(viewName);
 
             return new DrawingView(view);
         }
@@ -460,44 +436,7 @@ namespace CADBooster.SolidDna
         /// Attempts to attach unattached dimensions, for example in an imported DXF file
         /// </summary>
         public void AttachDimensions() => mBaseObject.AttachDimensions();
-
-        public ITableAnnotation InsertTable(
-            swBOMConfigurationAnchorType_e anchor,
-            XYZ position,
-            int rowCount,
-            int columnCount,
-            string templatePath = "")
-        {
-            return mBaseObject.InsertTableAnnotation2(
-                // True to anchor the table to the general table
-                // anchor point and ignore any coordinates specified
-                // for X and Y, or false to use the coordinates specified
-                // for X and Y
-                false,
-                // X coordinate to insert this table annotation
-                position.X,
-                // Y coordinate to insert this table annotation
-                position.Y,
-                // Type of anchor as defined in swBOMConfigurationAnchorType_e (see Remarks)
-                (int)anchor,
-                // Path and filename of the general table template to use  (see Remarks)
-                templatePath,
-                // Number of rows in the table annotation
-                rowCount,
-                // Number of columns in the table annotation
-                columnCount);
-
-            // Remarks
-            // If TableTemplate is... Then..
-
-            // A valid path and filename
-            // AnchorType and Columns are ignored, and the information
-            // from the table template is used instead
-
-            // Empty
-            // General table is inserted based only on the other input arguments
-        }
-
+        
         #endregion
 
         #region Line Style Methods

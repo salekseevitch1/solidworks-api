@@ -35,7 +35,7 @@ namespace CADBooster.SolidDna
         /// <summary>
         /// Gets the position
         /// </summary>
-        public XYZ Position => new XYZ(PositionX, PositionY, 0);
+        public double[] Position => [PositionX, PositionY, 0];
 
         /// <summary>
         /// Gets the model referenced by the associated document.
@@ -71,36 +71,6 @@ namespace CADBooster.SolidDna
         #region Public Members
 
         /// <summary>
-        /// Retrieves the normal vector of the associated object in the view coordinate system.
-        /// </summary>
-        /// <remarks>The normal vector is derived from the transformation matrix of the object.</remarks>
-        /// <returns>An <see cref="XYZ"/> object representing the normal vector in the view coordinate system.</returns>
-        public XYZ GetNormal()
-        {
-            var transform = UnsafeObject.ModelToViewTransform;
-
-            var transformArray = (double[])transform.ArrayData;
-
-            return new XYZ(transformArray[6], transformArray[7], transformArray[8]);
-        }
-
-        /// <summary>
-        /// Retrieves the 2D outline of the object as an <see cref="Outline2D"/> instance.
-        /// </summary>
-        /// <remarks>The outline is defined by a rectangular bounding box in 2D space, represented by its
-        /// minimum and maximum coordinates. The Z-coordinate of the resulting points is set to 0.</remarks>
-        /// <returns>An <see cref="Outline2D"/> object representing the 2D bounding box of the object.</returns>
-        public Outline2D GetOutline()
-        {
-            var box = (double[])BaseObject.GetOutline();
-
-            var min = new XYZ(box[0], box[1], 0);
-            var max = new XYZ(box[2], box[3], 0);
-
-            return new Outline2D(min, max);
-        }
-
-        /// <summary>
         /// Sets the scale value for the current object.
         /// </summary>
         /// <remarks>This method updates the scale of the underlying object. Ensure that the provided
@@ -119,8 +89,8 @@ namespace CADBooster.SolidDna
         /// before calling this method.</remarks>
         /// <param name="position">The <see cref="XYZ"/> instance representing the new position.  The <paramref name="position"/> must contain
         /// valid array data.</param>
-        public void SetPosition(XYZ position)
-            => UnsafeObject.Position = position.ArrayData;
+        public void SetPosition(double[] position)
+            => UnsafeObject.Position = position;
 
         #endregion
 

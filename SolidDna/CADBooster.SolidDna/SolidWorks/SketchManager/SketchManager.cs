@@ -5,16 +5,16 @@ namespace CADBooster.SolidDna.SketchManager;
 public class SketchManager(global::SolidWorks.Interop.sldworks.SketchManager comObject)
     : SolidDnaObject<global::SolidWorks.Interop.sldworks.SketchManager>(comObject)
 {
-    public SketchPoint CreatePoint(XYZ point)
+    public SketchPoint CreatePoint(double[] point)
     {
         UnsafeObject.InsertSketch(true);
 
         UnsafeObject.AddToDB = true;
 
         var sketchPoint = UnsafeObject.CreatePoint(
-            point.X,
-            point.Y,
-            point.Z);
+            point[0],
+            point[1],
+            point[2]);
 
         UnsafeObject.AddToDB = false;
 
@@ -23,21 +23,26 @@ public class SketchManager(global::SolidWorks.Interop.sldworks.SketchManager com
         return sketchPoint;
     }
 
-    public SketchSegment CreateCircle(XYZ center, double diameter)
+    public SketchSegment CreateCircle(double[] center, double diameter)
     {
         UnsafeObject.InsertSketch(true);
 
         UnsafeObject.AddToDB = true;
 
-        var pointOnCircle = center.MoveAlongVector(XYZ.BasisX, diameter / 2);
+        var pointOnCircle = new[]
+        {
+            center[0] + (diameter / 2),
+            center[1],
+            center[2]
+        };
 
         var sketchSegment = UnsafeObject.CreateCircle(
-            center.X,
-            center.Y,
-            center.Z,
-            pointOnCircle.X,
-            pointOnCircle.Y,
-            pointOnCircle.Z);
+            center[0],
+            center[1],
+            center[2],
+            pointOnCircle[0],
+            pointOnCircle[1],
+            pointOnCircle[2]);
 
         UnsafeObject.AddToDB = false;
 

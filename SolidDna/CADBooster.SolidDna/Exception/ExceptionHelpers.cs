@@ -59,11 +59,11 @@ namespace CADBooster.SolidDna
                     Debugger.Break();
 
                 // Log the error
-                Logger.LogCriticalSource($"Unexpected error at {source}. {ex.GetErrorMessage()}");
+                Logger.Logger.LogCriticalSource($"Unexpected error at {source}. {ex.GetErrorMessage()}");
             }
             catch (Exception iex)
             {
-                Logger.LogCriticalSource("GLOBAL EXCEPTION CRASHED ITSELF WITH " + iex.GetErrorMessage());
+                Logger.Logger.LogCriticalSource("GLOBAL EXCEPTION CRASHED ITSELF WITH " + iex.GetErrorMessage());
             }
         }
     }

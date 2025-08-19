@@ -97,7 +97,7 @@ namespace CADBooster.SolidDna
             catch (Exception e)
             {
                 // The exception is normally swallowed by SolidWorks, so rethrowing doesn't help.
-                Logger.LogCriticalSource("An exception occurred while trying to identify the add-in to SolidWorks.", exception: e);
+                Logger.Logger.LogCriticalSource("An exception occurred while trying to identify the add-in to SolidWorks.", exception: e);
                 MessageBox.Show($"An exception occurred while setting the add-in partner status in SolidWorks: {e.Message}");
                 return PartnerAddInKeyStatus.Fail;
             }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using ModelView = CADBooster.SolidDna.SolidWorks.Models.Views.ModelView;
+using ModelView = CADBooster.SolidDna.Views.ModelView;
 
 namespace CADBooster.SolidDna
 {
@@ -106,7 +106,7 @@ namespace CADBooster.SolidDna
         /// </summary>
         public ModelCreation Creation => new ModelCreation(this);
 
-        public ModelView ActiveModelView => new((IModelView)BaseObject.ActiveView, this);
+        public ModelView ActiveModelView => new((IModelView)BaseObject.ActiveView);
 
         public SketchManager.SketchManager SketchManager => new(BaseObject.SketchManager);
 
@@ -1617,48 +1617,6 @@ namespace CADBooster.SolidDna
 
             // Dispose self
             base.Dispose();
-        }
-
-        #endregion
-
-        #region Insert
-        public void InsertImage(string imagePath, XYZ origin, Size? size = null)
-        {
-            UnsafeObject.ClearSelection2(true);
-
-            var swSketchMgr = UnsafeObject.SketchManager;
-
-            UnsafeObject.EditSketch();
-
-            var image = swSketchMgr.InsertSketchPicture2(
-                imagePath,
-                true);
-
-            if (size != null)
-                image.SetSize(size.Width, size.Height, true);
-
-            image.SetOrigin(origin.X, origin.Y);
-
-            swSketchMgr.EditSketchBlock();
-        }
-
-        #endregion
-
-        #region View
-
-        public void ZoomTo(XYZ center, double size)
-        {
-            var min = center
-                .MoveAlongVector(-XYZ.BasisX, size / 2)
-                .MoveAlongVector(-XYZ.BasisY, size / 2);
-
-            var max = center
-                .MoveAlongVector(XYZ.BasisX, size / 2)
-                .MoveAlongVector(XYZ.BasisY, size / 2);
-
-            UnsafeObject.ViewZoomTo2(
-                min.X, min.Y, min.Z,
-                max.X, max.Y, max.Z);
         }
 
         #endregion

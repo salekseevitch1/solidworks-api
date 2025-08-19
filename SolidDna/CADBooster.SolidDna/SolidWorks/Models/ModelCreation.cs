@@ -8,17 +8,5 @@
         {
             _model = model;
         }
-
-        public void CreateLine(XYZ start, XYZ end)
-        {
-            _model.UnsafeObject.CreateLine2(
-                start.X,
-                start.Y,
-                start.Z,
-
-                end.X,
-                end.Y,
-                end.Z);
-        }
     }
 }

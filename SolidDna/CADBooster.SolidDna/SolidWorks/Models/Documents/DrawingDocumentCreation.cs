@@ -12,7 +12,7 @@ namespace CADBooster.SolidDna
         }
 
         public DrawingView CreateSection(
-            XYZ position,
+            double[] position,
             string sectionName,
             swCreateSectionViewAtOptions_e options,
             double depth = 0)
@@ -20,9 +20,9 @@ namespace CADBooster.SolidDna
             var drawing = _drawingDocument.UnsafeObject;
 
             var view = drawing.CreateSectionViewAt5(
-                position.X,
-                position.Y,
-                position.Z,
+                position[0],
+                position[1],
+                position[2],
                 sectionName,
                 (int)options,
                 (object)null,

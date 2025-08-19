@@ -52,6 +52,9 @@ Added inner exception info to SolidDnaException ToString.</PackageReleaseNotes>
     <PackageReference Include="UnitsNet" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Logger\Logger.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Windows.Forms" />

@@ -41,7 +41,7 @@ namespace CADBooster.SolidDna
                 SolidWorks = new SolidWorksApplication((SldWorks)Marshal.GetActiveObject("SldWorks.Application"), 0);
 
                 // Log it
-                Logger.LogDebugSource($"Acquired active instance SolidWorks in Stand-Alone mode");
+                Logger.Logger.LogDebugSource($"Acquired active instance SolidWorks in Stand-Alone mode");
 
                 // Return if successful
                 return SolidWorks != null;
@@ -50,7 +50,7 @@ namespace CADBooster.SolidDna
             catch (COMException)
             {
                 // Log it
-                Logger.LogDebugSource($"Failed to get active instance of SolidWorks in Stand-Alone mode");
+                Logger.Logger.LogDebugSource($"Failed to get active instance of SolidWorks in Stand-Alone mode");
 
                 // Return failure
                 return false;
@@ -66,7 +66,7 @@ namespace CADBooster.SolidDna
         {
             if (SolidWorks != null)
             {
-                Logger.LogDebugSource("SolidWorks instance was already created");
+                Logger.Logger.LogDebugSource("SolidWorks instance was already created");
                 return;
             }
 
@@ -79,11 +79,11 @@ namespace CADBooster.SolidDna
                 SolidWorks = new SolidWorksApplication((SldWorks)Activator.CreateInstance(Type.GetTypeFromProgID(progId)), cookie);
 
                 // Log it
-                Logger.LogDebugSource($"SolidWorks Instance Created? {SolidWorks != null}");
+                Logger.Logger.LogDebugSource($"SolidWorks Instance Created? {SolidWorks != null}");
             }
             catch (Exception e)
             {
-                Logger.LogDebugSource("Failed to get active instance of SolidWorks in add-in mode", exception: e);
+                Logger.Logger.LogDebugSource("Failed to get active instance of SolidWorks in add-in mode", exception: e);
             }
         }
 
@@ -155,7 +155,7 @@ namespace CADBooster.SolidDna
             if (SolidWorks != null)
             {
                 // Log it
-                Logger.LogDebugSource($"Disposing SolidWorks COM reference...");
+                Logger.Logger.LogDebugSource($"Disposing SolidWorks COM reference...");
 
                 // Dispose SolidWorks COM
                 SolidWorks?.Dispose();
